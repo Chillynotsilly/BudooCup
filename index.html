@@ -345,14 +345,32 @@ label { font-size: 0.85em; color: var(--text-secondary); font-family: 'Oswald', 
 ::-webkit-scrollbar-thumb:hover { background: var(--nrl-green-mid); }
 
 @media (max-width: 768px) {
-  .header h1 { font-size: 1.8em; }
-  .container { padding: 16px; }
-  .nav-tab { padding: 12px 16px; font-size: 0.85em; }
-  .tier-tabs { flex-direction: column; }
-  .form-row { grid-template-columns: 1fr; }
-  table { font-size: 0.85em; }
-  th, td { padding: 8px 10px; }
+  .header h1 { font-size: 1.6em; }
+  .header-overlay { padding: 14px 16px; }
+  .header-photo-spacer { height: 120px; }
+  .container { padding: 10px; }
+  .nav { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .nav-tab { padding: 10px 14px; font-size: 0.8em; flex-shrink: 0; }
+  .tier-tabs { flex-direction: column; gap: 6px; margin-bottom: 16px; }
+  .tier-tab { padding: 10px 12px; font-size: 0.9em; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--radius); }
+  table { font-size: 0.8em; min-width: 500px; }
+  th, td { padding: 6px 8px; white-space: nowrap; }
+  .pos-cell { width: 30px; }
+  .team-name { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .matchup { grid-template-columns: 1fr auto 1fr; gap: 6px; padding: 10px 12px; font-size: 0.85em; }
+  .matchup-score { font-size: 1em; }
+  .season-selector { flex-wrap: wrap; gap: 8px; }
+  .season-selector label { width: 100%; }
+  .week-nav { flex-wrap: wrap; }
   .award-grid { grid-template-columns: 1fr; }
+  .award-item { padding: 8px 10px; }
+  .history-card { padding: 14px; }
+  .card { padding: 14px; }
+  .career-table { min-width: 600px; }
+  .h2h-table { min-width: 800px; }
+  .legend { flex-direction: column; gap: 8px; }
+  .promo-releg-summary { grid-template-columns: 1fr; }
 }
 
 @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
