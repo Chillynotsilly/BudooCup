@@ -270,10 +270,7 @@ label { font-size: 0.85em; color: var(--text-secondary); font-family: 'Oswald', 
 .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 16px; }
 .form-group { display: flex; flex-direction: column; gap: 4px; }
 
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,20,14,0.85); z-index: 1000; justify-content: center; align-items: center; padding: 24px; }
-.modal-overlay.open { display: flex; }
-.modal { background: var(--bg-card); border: 1px solid var(--nrl-green); border-radius: var(--radius-lg); padding: 28px; max-width: 600px; width: 100%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(0,114,57,0.15); }
-.modal h3 { color: var(--nrl-gold); margin-bottom: 20px; font-size: 1.4em; }
+
 
 .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow); }
 .card h3 { font-size: 1.1em; color: var(--nrl-gold); margin-bottom: 16px; }
@@ -386,7 +383,6 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 
   <div class="nav-tab" data-page="promo-releg">Promo / Releg</div>
   <div class="nav-tab" data-page="history">Season History</div>
   <div class="nav-tab" data-page="career">Career Stats</div>
-  <div class="nav-tab" data-page="manage">Manage</div>
 </div>
 
 <div class="container">
@@ -466,92 +462,9 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 
     <div id="career-area"></div>
   </div>
 
-  <!-- MANAGE -->
-  <div class="page" id="page-manage">
-    <div id="manage-locked" style="text-align:center;padding:60px 20px">
-      <h3 style="color:var(--nrl-gold);margin-bottom:16px;font-size:1.5em">🔒 Admin Access Required</h3>
-      <p style="color:var(--text-secondary);margin-bottom:20px">Enter the admin password to access team management.</p>
-      <div style="display:flex;justify-content:center;gap:8px;max-width:300px;margin:0 auto">
-        <input id="admin-pw" type="password" placeholder="Password" style="flex:1" onkeydown="if(event.key==='Enter')unlockManage()">
-        <button class="btn btn-primary" onclick="unlockManage()">Unlock</button>
-      </div>
-      <p id="pw-error" style="color:var(--red);margin-top:10px;font-size:0.85em;display:none">Incorrect password</p>
-    </div>
-    <div id="manage-unlocked" style="display:none">
-      <div class="season-selector">
-        <label style="margin-bottom:0">Season:</label>
-        <select id="manage-season-select"></select>
-      </div>
-      <div class="btn-group" style="margin-bottom:20px">
-        <button class="btn btn-primary" onclick="openModal('modal-add-team')">+ Add Team</button>
-        <button class="btn btn-primary" onclick="openAddScoresModal()">+ Add Scores</button>
-        <button class="btn btn-secondary" onclick="exportData()">Export Data</button>
-        <button class="btn btn-secondary" onclick="document.getElementById('import-file').click()">Import Data</button>
-        <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
-        <button class="btn btn-danger" onclick="clearAllData()">Reset All Data</button>
-      </div>
-      <div id="manage-area"></div>
-    </div>
-  </div>
 </div>
 
-<!-- MODALS -->
-<div class="modal-overlay" id="modal-new-season">
-  <div class="modal">
-    <h3>New Season</h3>
-    <div class="form-group" style="margin-bottom:16px">
-      <label>Season Name (e.g. 2027)</label>
-      <input id="new-season-name" placeholder="2027">
-    </div>
-    <div class="form-group" style="margin-bottom:16px">
-      <label>Copy teams from season</label>
-      <select id="copy-from-season"><option value="">Start fresh</option></select>
-    </div>
-    <div class="btn-group">
-      <button class="btn btn-primary" onclick="createSeason()">Create</button>
-      <button class="btn btn-secondary" onclick="closeModal('modal-new-season')">Cancel</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modal-add-team">
-  <div class="modal">
-    <h3>Add Team</h3>
-    <div class="form-group" style="margin-bottom:16px">
-      <label>Team Name</label>
-      <input id="add-team-name" placeholder="Team name">
-    </div>
-    <div class="form-group" style="margin-bottom:16px">
-      <label>Tier</label>
-      <select id="add-team-tier">
-        <option value="budoo-cup">Budoo Cup</option>
-        <option value="div-2">Budoo Div 2</option>
-        <option value="div-3">Budoo Div 3</option>
-      </select>
-    </div>
-    <div class="btn-group">
-      <button class="btn btn-primary" onclick="addTeam()">Add</button>
-      <button class="btn btn-secondary" onclick="closeModal('modal-add-team')">Cancel</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modal-add-scores">
-  <div class="modal">
-    <h3>Add Weekly Scores</h3>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Round</label>
-        <input id="score-round" type="number" min="1" value="1">
-      </div>
-    </div>
-    <div id="score-entries"></div>
-    <div class="btn-group" style="margin-top:16px">
-      <button class="btn btn-primary" onclick="saveScores()">Save Scores</button>
-      <button class="btn btn-secondary" onclick="closeModal('modal-add-scores')">Cancel</button>
-    </div>
-  </div>
-</div>
+<!-- MODALS - removed, data is baked in -->
 
 <script>
 const TIERS = ['budoo-cup','div-2','div-3'];
@@ -641,18 +554,6 @@ function getCupTrophies(teamName) {
   return ' ' + '🏆'.repeat(count);
 }
 
-// Admin password - stored as SHA-256 hash so it's not visible in source
-// To change password: hash your new password at any SHA-256 tool online and replace this
-const ADMIN_HASH = '04ee32886ef4a8711094fd75a200efccb69e920a4ba1bb86b2f3e7435d33b248';
-let adminUnlocked = false;
-
-async function hashPassword(pw) {
-  const enc = new TextEncoder().encode(pw);
-  const buf = await crypto.subtle.digest('SHA-256', enc);
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-}
-
-// ===== HARDCODED HISTORICAL DATA =====
 const HISTORY = {
   "2021": {
     winners: { "Budoo Cup": "Sami" },
@@ -719,26 +620,15 @@ const CAREER_STATS = [
 ];
 
 // ===== DATA STORE =====
-let DATA = loadData();
 let currentTier = { standings:'budoo-cup', scores:'budoo-cup', h2h:'budoo-cup' };
 let currentWeek = 1;
 
 // Baked-in data — everyone sees the same thing
-const BAKED_DATA = {"currentSeason": "2026", "seasons": {"2026": {"teams": {"budoo-cup": ["Scoble's Skunks", "Pezet Dispenser", "Pay Piggies", "Dalyroosters", "Jack DeFelons", "Toeknee Carroll", "Barraba Bulldogs", "Belarkes Battlers", "Bundanoon Bulldogs", "Timbumburi Titans", "Payne in the Haas", "Red V Barbz", "Tolmans Toilers", "Stumpy", "The Sleeping Giant", "Moree Madness", "Jackos Cockadoodle", "Pop My Cherry", "Fold Some Hunt", "moneyballers"], "div-2": ["Sawtell Slobs", "UNCLE NICKS WALLET", "BuzzLikesGear", "Cookies Contenders", "FiftyShadesofGray", "Bellyaches", "Bricks Blocklayers", "Doueihi Dime", "Snr barbs", "Hopwood's Hero's", "Manly Munters", "Brucey's Blokes", "Bricked Up", "Power Puffs", "Squirt Squad", "Cody", "Smells Like 05'", "Tino Noir", "The Shaggas", "Combatwombat"], "div-3": ["Johnny Leggs", "Tribute", "Jack De Bellend", "Cant win", "Sheely's Sunrisers", "Turbo charged", "Sticky's Soldiers", "Parsons crabs", "Cutters", "Bush Pigs", "Poo Slingers", "Heard of em'", "On The Rox", "Backers Bust-ups", "Uncle Campbells", "SlipperyMcgee", "Good Cluck", "Steady Eddys", "Onyabikelomax", "Nelson Mandela"]}, "scores": {"budoo-cup": [{"round": 1, "matches": [{"team1": "Dalyroosters", "team2": "Moree Madness", "score1": 1451, "score2": 1248}, {"team1": "Tolmans Toilers", "team2": "Pay Piggies", "score1": 1248, "score2": 1292}, {"team1": "Pezet Dispenser", "team2": "Pop My Cherry", "score1": 1263, "score2": 1156}, {"team1": "moneyballers", "team2": "Toeknee Carroll", "score1": 1317, "score2": 1402}, {"team1": "Jack DeFelons", "team2": "The Sleeping Giant", "score1": 1425, "score2": 1134}, {"team1": "Jackos Cockadoodle", "team2": "Bundanoon Bulldogs", "score1": 1326, "score2": 1399}, {"team1": "Barraba Bulldogs", "team2": "Belarkes Battlers", "score1": 1371, "score2": 1405}, {"team1": "Timbumburi Titans", "team2": "Stumpy", "score1": 1366, "score2": 1318}, {"team1": "Fold Some Hunt", "team2": "Scoble's Skunks", "score1": 1264, "score2": 1381}, {"team1": "Red V Barbz", "team2": "Payne in the Haas", "score1": 1211, "score2": 1246}]}, {"round": 2, "matches": [{"team1": "Tolmans Toilers", "team2": "Dalyroosters", "score1": 1277, "score2": 1429}, {"team1": "Pezet Dispenser", "team2": "Moree Madness", "score1": 1268, "score2": 1221}, {"team1": "moneyballers", "team2": "Pay Piggies", "score1": 1320, "score2": 1389}, {"team1": "Jack DeFelons", "team2": "Pop My Cherry", "score1": 1277, "score2": 1222}, {"team1": "Jackos Cockadoodle", "team2": "Toeknee Carroll", "score1": 1251, "score2": 1278}, {"team1": "Barraba Bulldogs", "team2": "The Sleeping Giant", "score1": 1242, "score2": 1222}, {"team1": "Timbumburi Titans", "team2": "Bundanoon Bulldogs", "score1": 1252, "score2": 1360}, {"team1": "Fold Some Hunt", "team2": "Belarkes Battlers", "score1": 1195, "score2": 1199}, {"team1": "Red V Barbz", "team2": "Stumpy", "score1": 1317, "score2": 1355}, {"team1": "Payne in the Haas", "team2": "Scoble's Skunks", "score1": 1202, "score2": 1291}]}, {"round": 3, "matches": [{"team1": "Dalyroosters", "team2": "Pezet Dispenser", "score1": 1086, "score2": 1146}, {"team1": "Tolmans Toilers", "team2": "moneyballers", "score1": 1247, "score2": 1091}, {"team1": "Jack DeFelons", "team2": "Moree Madness", "score1": 1169, "score2": 1234}, {"team1": "Jackos Cockadoodle", "team2": "Pay Piggies", "score1": 1139, "score2": 1229}, {"team1": "Barraba Bulldogs", "team2": "Pop My Cherry", "score1": 1142, "score2": 1079}, {"team1": "Timbumburi Titans", "team2": "Toeknee Carroll", "score1": 1076, "score2": 1037}, {"team1": "Fold Some Hunt", "team2": "The Sleeping Giant", "score1": 1159, "score2": 1291}, {"team1": "Red V Barbz", "team2": "Bundanoon Bulldogs", "score1": 1355, "score2": 1202}, {"team1": "Payne in the Haas", "team2": "Belarkes Battlers", "score1": 1138, "score2": 1135}, {"team1": "Scoble's Skunks", "team2": "Stumpy", "score1": 1222, "score2": 1089}]}, {"round": 4, "matches": [{"team1": "Dalyroosters", "team2": "moneyballers", "score1": 1254, "score2": 1208}, {"team1": "Jack DeFelons", "team2": "Pezet Dispenser", "score1": 1318, "score2": 1278}, {"team1": "Tolmans Toilers", "team2": "Jackos Cockadoodle", "score1": 1156, "score2": 1247}, {"team1": "Barraba Bulldogs", "team2": "Moree Madness", "score1": 1191, "score2": 1197}, {"team1": "Timbumburi Titans", "team2": "Pay Piggies", "score1": 1220, "score2": 1117}, {"team1": "Fold Some Hunt", "team2": "Pop My Cherry", "score1": 1240, "score2": 1100}, {"team1": "Red V Barbz", "team2": "Toeknee Carroll", "score1": 1255, "score2": 1370}, {"team1": "Payne in the Haas", "team2": "The Sleeping Giant", "score1": 1141, "score2": 1277}, {"team1": "Scoble's Skunks", "team2": "Bundanoon Bulldogs", "score1": 1303, "score2": 1283}, {"team1": "Stumpy", "team2": "Belarkes Battlers", "score1": 1298, "score2": 1200}]}], "div-2": [{"round": 1, "matches": [{"team1": "Combatwombat", "team2": "Snr barbs", "score1": 1086, "score2": 1414}, {"team1": "UNCLE NICKS WALLET", "team2": "BuzzLikesGear", "score1": 1235, "score2": 1204}, {"team1": "Manly Munters", "team2": "FiftyShadesofGray", "score1": 1100, "score2": 1380}, {"team1": "Brucey's Blokes", "team2": "Bellyaches", "score1": 1262, "score2": 1263}, {"team1": "Bricked Up", "team2": "Hopwood's Hero's", "score1": 1346, "score2": 1487}, {"team1": "The Shaggas", "team2": "Doueihi Dime", "score1": 1238, "score2": 1381}, {"team1": "Sawtell Slobs", "team2": "Power Puffs", "score1": 1455, "score2": 1208}, {"team1": "Cody", "team2": "Cookies Contenders", "score1": 1240, "score2": 1330}, {"team1": "Tino Noir", "team2": "Smells Like 05'", "score1": 1211, "score2": 1204}, {"team1": "Bricks Blocklayers", "team2": "Squirt Squad", "score1": 1403, "score2": 1387}]}, {"round": 2, "matches": [{"team1": "Combatwombat", "team2": "UNCLE NICKS WALLET", "score1": 989, "score2": 1213}, {"team1": "Manly Munters", "team2": "Snr barbs", "score1": 1324, "score2": 1197}, {"team1": "Brucey's Blokes", "team2": "BuzzLikesGear", "score1": 1124, "score2": 1265}, {"team1": "Bricked Up", "team2": "FiftyShadesofGray", "score1": 1198, "score2": 1270}, {"team1": "The Shaggas", "team2": "Bellyaches", "score1": 1249, "score2": 1357}, {"team1": "Sawtell Slobs", "team2": "Hopwood's Hero's", "score1": 1371, "score2": 1204}, {"team1": "Cody", "team2": "Doueihi Dime", "score1": 1197, "score2": 1219}, {"team1": "Smells Like 05'", "team2": "Power Puffs", "score1": 1292, "score2": 1328}, {"team1": "Bricks Blocklayers", "team2": "Cookies Contenders", "score1": 1136, "score2": 1238}, {"team1": "Tino Noir", "team2": "Squirt Squad", "score1": 1160, "score2": 1178}]}, {"round": 3, "matches": [{"team1": "Combatwombat", "team2": "Manly Munters", "score1": 1097, "score2": 1197}, {"team1": "Brucey's Blokes", "team2": "UNCLE NICKS WALLET", "score1": 1206, "score2": 1216}, {"team1": "Bricked Up", "team2": "Snr barbs", "score1": 1131, "score2": 1097}, {"team1": "The Shaggas", "team2": "BuzzLikesGear", "score1": 1135, "score2": 1255}, {"team1": "Sawtell Slobs", "team2": "FiftyShadesofGray", "score1": 1285, "score2": 1025}, {"team1": "Cody", "team2": "Bellyaches", "score1": 1261, "score2": 1068}, {"team1": "Smells Like 05'", "team2": "Hopwood's Hero's", "score1": 1158, "score2": 1186}, {"team1": "Bricks Blocklayers", "team2": "Doueihi Dime", "score1": 1220, "score2": 1073}, {"team1": "Squirt Squad", "team2": "Power Puffs", "score1": 1120, "score2": 1122}, {"team1": "Tino Noir", "team2": "Cookies Contenders", "score1": 1225, "score2": 1139}]}, {"round": 4, "matches": [{"team1": "Combatwombat", "team2": "Brucey's Blokes", "score1": 1087, "score2": 1128}, {"team1": "Bricked Up", "team2": "Manly Munters", "score1": 1187, "score2": 1180}, {"team1": "The Shaggas", "team2": "UNCLE NICKS WALLET", "score1": 1211, "score2": 1116}, {"team1": "Sawtell Slobs", "team2": "Snr barbs", "score1": 1256, "score2": 1299}, {"team1": "Cody", "team2": "BuzzLikesGear", "score1": 899, "score2": 1260}, {"team1": "Smells Like 05'", "team2": "FiftyShadesofGray", "score1": 1164, "score2": 1202}, {"team1": "Bricks Blocklayers", "team2": "Bellyaches", "score1": 1201, "score2": 1196}, {"team1": "Squirt Squad", "team2": "Hopwood's Hero's", "score1": 857, "score2": 1296}, {"team1": "Tino Noir", "team2": "Doueihi Dime", "score1": 1184, "score2": 1191}, {"team1": "Cookies Contenders", "team2": "Power Puffs", "score1": 1469, "score2": 1323}]}], "div-3": [{"round": 1, "matches": [{"team1": "Good Cluck", "team2": "Jack De Bellend", "score1": 1226, "score2": 1369}, {"team1": "Tribute", "team2": "Uncle Campbells", "score1": 1212, "score2": 1302}, {"team1": "Backers Bust-ups", "team2": "Onyabikelomax", "score1": 1417, "score2": 1309}, {"team1": "On The Rox", "team2": "Sticky's Soldiers", "score1": 1225, "score2": 1308}, {"team1": "Poo Slingers", "team2": "Bush Pigs", "score1": 1165, "score2": 1208}, {"team1": "SlipperyMcgee", "team2": "Cutters", "score1": 1381, "score2": 1430}, {"team1": "Cant win", "team2": "Steady Eddys", "score1": 1384, "score2": 1271}, {"team1": "Johnny Leggs", "team2": "Parsons crabs", "score1": 1162, "score2": 1039}, {"team1": "Sheely's Sunrisers", "team2": "Turbo charged", "score1": 1369, "score2": 1380}, {"team1": "Nelson Mandela", "team2": "Heard of em'", "score1": 922, "score2": 1024}]}, {"round": 2, "matches": [{"team1": "Good Cluck", "team2": "Tribute", "score1": 1132, "score2": 1367}, {"team1": "Backers Bust-ups", "team2": "Jack De Bellend", "score1": 1208, "score2": 1330}, {"team1": "Sticky's Soldiers", "team2": "Uncle Campbells", "score1": 1309, "score2": 1155}, {"team1": "Poo Slingers", "team2": "Onyabikelomax", "score1": 1186, "score2": 1147}, {"team1": "On The Rox", "team2": "SlipperyMcgee", "score1": 1154, "score2": 974}, {"team1": "Cant win", "team2": "Bush Pigs", "score1": 1261, "score2": 1298}, {"team1": "Johnny Leggs", "team2": "Cutters", "score1": 1257, "score2": 1133}, {"team1": "Sheely's Sunrisers", "team2": "Steady Eddys", "score1": 1336, "score2": 1171}, {"team1": "Nelson Mandela", "team2": "Parsons crabs", "score1": 965, "score2": 1081}, {"team1": "Heard of em'", "team2": "Turbo charged", "score1": 1106, "score2": 1342}]}, {"round": 3, "matches": [{"team1": "Good Cluck", "team2": "Backers Bust-ups", "score1": 1232, "score2": 1228}, {"team1": "Sticky's Soldiers", "team2": "Tribute", "score1": 1077, "score2": 1200}, {"team1": "Poo Slingers", "team2": "Jack De Bellend", "score1": 1169, "score2": 1156}, {"team1": "SlipperyMcgee", "team2": "Uncle Campbells", "score1": 1198, "score2": 1150}, {"team1": "Cant win", "team2": "Onyabikelomax", "score1": 1173, "score2": 1015}, {"team1": "On The Rox", "team2": "Johnny Leggs", "score1": 1019, "score2": 1117}, {"team1": "Sheely's Sunrisers", "team2": "Bush Pigs", "score1": 1161, "score2": 1095}, {"team1": "Nelson Mandela", "team2": "Cutters", "score1": 1028, "score2": 1130}, {"team1": "Heard of em'", "team2": "Steady Eddys", "score1": 1080, "score2": 1066}, {"team1": "Turbo charged", "team2": "Parsons crabs", "score1": 1067, "score2": 1111}]}, {"round": 4, "matches": [{"team1": "Good Cluck", "team2": "Sticky's Soldiers", "score1": 1157, "score2": 1021}, {"team1": "Poo Slingers", "team2": "Backers Bust-ups", "score1": 1076, "score2": 1141}, {"team1": "SlipperyMcgee", "team2": "Tribute", "score1": 1097, "score2": 1280}, {"team1": "Cant win", "team2": "Jack De Bellend", "score1": 1228, "score2": 1290}, {"team1": "Johnny Leggs", "team2": "Uncle Campbells", "score1": 1000, "score2": 1362}, {"team1": "Sheely's Sunrisers", "team2": "Onyabikelomax", "score1": 1281, "score2": 1116}, {"team1": "On The Rox", "team2": "Nelson Mandela", "score1": 1171, "score2": 1182}, {"team1": "Heard of em'", "team2": "Bush Pigs", "score1": 1075, "score2": 1318}, {"team1": "Turbo charged", "team2": "Cutters", "score1": 1189, "score2": 1162}, {"team1": "Parsons crabs", "team2": "Steady Eddys", "score1": 1110, "score2": 1370}]}]}, "presentation": {}}}};
+const BAKED_DATA = JSON.parse("{\"currentSeason\": \"2026\", \"seasons\": {\"2026\": {\"teams\": {\"budoo-cup\": [\"Scoble's Skunks\", \"Pezet Dispenser\", \"Pay Piggies\", \"Dalyroosters\", \"Jack DeFelons\", \"Toeknee Carroll\", \"Barraba Bulldogs\", \"Belarkes Battlers\", \"Bundanoon Bulldogs\", \"Timbumburi Titans\", \"Payne in the Haas\", \"Red V Barbz\", \"Tolmans Toilers\", \"Stumpy\", \"The Sleeping Giant\", \"Moree Madness\", \"Jackos Cockadoodle\", \"Pop My Cherry\", \"Fold Some Hunt\", \"moneyballers\"], \"div-2\": [\"Sawtell Slobs\", \"UNCLE NICKS WALLET\", \"BuzzLikesGear\", \"Cookies Contenders\", \"FiftyShadesofGray\", \"Bellyaches\", \"Bricks Blocklayers\", \"Doueihi Dime\", \"Snr barbs\", \"Hopwood's Hero's\", \"Manly Munters\", \"Brucey's Blokes\", \"Bricked Up\", \"Power Puffs\", \"Squirt Squad\", \"Cody\", \"Smells Like 05'\", \"Tino Noir\", \"The Shaggas\", \"Combatwombat\"], \"div-3\": [\"Johnny Leggs\", \"Tribute\", \"Jack De Bellend\", \"Cant win\", \"Sheely's Sunrisers\", \"Turbo charged\", \"Sticky's Soldiers\", \"Parsons crabs\", \"Cutters\", \"Bush Pigs\", \"Poo Slingers\", \"Heard of em'\", \"On The Rox\", \"Backers Bust-ups\", \"Uncle Campbells\", \"SlipperyMcgee\", \"Good Cluck\", \"Steady Eddys\", \"Onyabikelomax\", \"Nelson Mandela\"]}, \"scores\": {\"budoo-cup\": [{\"round\": 1, \"matches\": [{\"team1\": \"Dalyroosters\", \"team2\": \"Moree Madness\", \"score1\": 1451, \"score2\": 1248}, {\"team1\": \"Tolmans Toilers\", \"team2\": \"Pay Piggies\", \"score1\": 1248, \"score2\": 1292}, {\"team1\": \"Pezet Dispenser\", \"team2\": \"Pop My Cherry\", \"score1\": 1263, \"score2\": 1156}, {\"team1\": \"moneyballers\", \"team2\": \"Toeknee Carroll\", \"score1\": 1317, \"score2\": 1402}, {\"team1\": \"Jack DeFelons\", \"team2\": \"The Sleeping Giant\", \"score1\": 1425, \"score2\": 1134}, {\"team1\": \"Jackos Cockadoodle\", \"team2\": \"Bundanoon Bulldogs\", \"score1\": 1326, \"score2\": 1399}, {\"team1\": \"Barraba Bulldogs\", \"team2\": \"Belarkes Battlers\", \"score1\": 1371, \"score2\": 1405}, {\"team1\": \"Timbumburi Titans\", \"team2\": \"Stumpy\", \"score1\": 1366, \"score2\": 1318}, {\"team1\": \"Fold Some Hunt\", \"team2\": \"Scoble's Skunks\", \"score1\": 1264, \"score2\": 1381}, {\"team1\": \"Red V Barbz\", \"team2\": \"Payne in the Haas\", \"score1\": 1211, \"score2\": 1246}]}, {\"round\": 2, \"matches\": [{\"team1\": \"Tolmans Toilers\", \"team2\": \"Dalyroosters\", \"score1\": 1277, \"score2\": 1429}, {\"team1\": \"Pezet Dispenser\", \"team2\": \"Moree Madness\", \"score1\": 1268, \"score2\": 1221}, {\"team1\": \"moneyballers\", \"team2\": \"Pay Piggies\", \"score1\": 1320, \"score2\": 1389}, {\"team1\": \"Jack DeFelons\", \"team2\": \"Pop My Cherry\", \"score1\": 1277, \"score2\": 1222}, {\"team1\": \"Jackos Cockadoodle\", \"team2\": \"Toeknee Carroll\", \"score1\": 1251, \"score2\": 1278}, {\"team1\": \"Barraba Bulldogs\", \"team2\": \"The Sleeping Giant\", \"score1\": 1242, \"score2\": 1222}, {\"team1\": \"Timbumburi Titans\", \"team2\": \"Bundanoon Bulldogs\", \"score1\": 1252, \"score2\": 1360}, {\"team1\": \"Fold Some Hunt\", \"team2\": \"Belarkes Battlers\", \"score1\": 1195, \"score2\": 1199}, {\"team1\": \"Red V Barbz\", \"team2\": \"Stumpy\", \"score1\": 1317, \"score2\": 1355}, {\"team1\": \"Payne in the Haas\", \"team2\": \"Scoble's Skunks\", \"score1\": 1202, \"score2\": 1291}]}, {\"round\": 3, \"matches\": [{\"team1\": \"Dalyroosters\", \"team2\": \"Pezet Dispenser\", \"score1\": 1086, \"score2\": 1146}, {\"team1\": \"Tolmans Toilers\", \"team2\": \"moneyballers\", \"score1\": 1247, \"score2\": 1091}, {\"team1\": \"Jack DeFelons\", \"team2\": \"Moree Madness\", \"score1\": 1169, \"score2\": 1234}, {\"team1\": \"Jackos Cockadoodle\", \"team2\": \"Pay Piggies\", \"score1\": 1139, \"score2\": 1229}, {\"team1\": \"Barraba Bulldogs\", \"team2\": \"Pop My Cherry\", \"score1\": 1142, \"score2\": 1079}, {\"team1\": \"Timbumburi Titans\", \"team2\": \"Toeknee Carroll\", \"score1\": 1076, \"score2\": 1037}, {\"team1\": \"Fold Some Hunt\", \"team2\": \"The Sleeping Giant\", \"score1\": 1159, \"score2\": 1291}, {\"team1\": \"Red V Barbz\", \"team2\": \"Bundanoon Bulldogs\", \"score1\": 1355, \"score2\": 1202}, {\"team1\": \"Payne in the Haas\", \"team2\": \"Belarkes Battlers\", \"score1\": 1138, \"score2\": 1135}, {\"team1\": \"Scoble's Skunks\", \"team2\": \"Stumpy\", \"score1\": 1222, \"score2\": 1089}]}, {\"round\": 4, \"matches\": [{\"team1\": \"Dalyroosters\", \"team2\": \"moneyballers\", \"score1\": 1254, \"score2\": 1208}, {\"team1\": \"Jack DeFelons\", \"team2\": \"Pezet Dispenser\", \"score1\": 1318, \"score2\": 1278}, {\"team1\": \"Tolmans Toilers\", \"team2\": \"Jackos Cockadoodle\", \"score1\": 1156, \"score2\": 1247}, {\"team1\": \"Barraba Bulldogs\", \"team2\": \"Moree Madness\", \"score1\": 1191, \"score2\": 1197}, {\"team1\": \"Timbumburi Titans\", \"team2\": \"Pay Piggies\", \"score1\": 1220, \"score2\": 1117}, {\"team1\": \"Fold Some Hunt\", \"team2\": \"Pop My Cherry\", \"score1\": 1240, \"score2\": 1100}, {\"team1\": \"Red V Barbz\", \"team2\": \"Toeknee Carroll\", \"score1\": 1255, \"score2\": 1370}, {\"team1\": \"Payne in the Haas\", \"team2\": \"The Sleeping Giant\", \"score1\": 1141, \"score2\": 1277}, {\"team1\": \"Scoble's Skunks\", \"team2\": \"Bundanoon Bulldogs\", \"score1\": 1303, \"score2\": 1283}, {\"team1\": \"Stumpy\", \"team2\": \"Belarkes Battlers\", \"score1\": 1298, \"score2\": 1200}]}], \"div-2\": [{\"round\": 1, \"matches\": [{\"team1\": \"Combatwombat\", \"team2\": \"Snr barbs\", \"score1\": 1086, \"score2\": 1414}, {\"team1\": \"UNCLE NICKS WALLET\", \"team2\": \"BuzzLikesGear\", \"score1\": 1235, \"score2\": 1204}, {\"team1\": \"Manly Munters\", \"team2\": \"FiftyShadesofGray\", \"score1\": 1100, \"score2\": 1380}, {\"team1\": \"Brucey's Blokes\", \"team2\": \"Bellyaches\", \"score1\": 1262, \"score2\": 1263}, {\"team1\": \"Bricked Up\", \"team2\": \"Hopwood's Hero's\", \"score1\": 1346, \"score2\": 1487}, {\"team1\": \"The Shaggas\", \"team2\": \"Doueihi Dime\", \"score1\": 1238, \"score2\": 1381}, {\"team1\": \"Sawtell Slobs\", \"team2\": \"Power Puffs\", \"score1\": 1455, \"score2\": 1208}, {\"team1\": \"Cody\", \"team2\": \"Cookies Contenders\", \"score1\": 1240, \"score2\": 1330}, {\"team1\": \"Tino Noir\", \"team2\": \"Smells Like 05'\", \"score1\": 1211, \"score2\": 1204}, {\"team1\": \"Bricks Blocklayers\", \"team2\": \"Squirt Squad\", \"score1\": 1403, \"score2\": 1387}]}, {\"round\": 2, \"matches\": [{\"team1\": \"Combatwombat\", \"team2\": \"UNCLE NICKS WALLET\", \"score1\": 989, \"score2\": 1213}, {\"team1\": \"Manly Munters\", \"team2\": \"Snr barbs\", \"score1\": 1324, \"score2\": 1197}, {\"team1\": \"Brucey's Blokes\", \"team2\": \"BuzzLikesGear\", \"score1\": 1124, \"score2\": 1265}, {\"team1\": \"Bricked Up\", \"team2\": \"FiftyShadesofGray\", \"score1\": 1198, \"score2\": 1270}, {\"team1\": \"The Shaggas\", \"team2\": \"Bellyaches\", \"score1\": 1249, \"score2\": 1357}, {\"team1\": \"Sawtell Slobs\", \"team2\": \"Hopwood's Hero's\", \"score1\": 1371, \"score2\": 1204}, {\"team1\": \"Cody\", \"team2\": \"Doueihi Dime\", \"score1\": 1197, \"score2\": 1219}, {\"team1\": \"Smells Like 05'\", \"team2\": \"Power Puffs\", \"score1\": 1292, \"score2\": 1328}, {\"team1\": \"Bricks Blocklayers\", \"team2\": \"Cookies Contenders\", \"score1\": 1136, \"score2\": 1238}, {\"team1\": \"Tino Noir\", \"team2\": \"Squirt Squad\", \"score1\": 1160, \"score2\": 1178}]}, {\"round\": 3, \"matches\": [{\"team1\": \"Combatwombat\", \"team2\": \"Manly Munters\", \"score1\": 1097, \"score2\": 1197}, {\"team1\": \"Brucey's Blokes\", \"team2\": \"UNCLE NICKS WALLET\", \"score1\": 1206, \"score2\": 1216}, {\"team1\": \"Bricked Up\", \"team2\": \"Snr barbs\", \"score1\": 1131, \"score2\": 1097}, {\"team1\": \"The Shaggas\", \"team2\": \"BuzzLikesGear\", \"score1\": 1135, \"score2\": 1255}, {\"team1\": \"Sawtell Slobs\", \"team2\": \"FiftyShadesofGray\", \"score1\": 1285, \"score2\": 1025}, {\"team1\": \"Cody\", \"team2\": \"Bellyaches\", \"score1\": 1261, \"score2\": 1068}, {\"team1\": \"Smells Like 05'\", \"team2\": \"Hopwood's Hero's\", \"score1\": 1158, \"score2\": 1186}, {\"team1\": \"Bricks Blocklayers\", \"team2\": \"Doueihi Dime\", \"score1\": 1220, \"score2\": 1073}, {\"team1\": \"Squirt Squad\", \"team2\": \"Power Puffs\", \"score1\": 1120, \"score2\": 1122}, {\"team1\": \"Tino Noir\", \"team2\": \"Cookies Contenders\", \"score1\": 1225, \"score2\": 1139}]}, {\"round\": 4, \"matches\": [{\"team1\": \"Combatwombat\", \"team2\": \"Brucey's Blokes\", \"score1\": 1087, \"score2\": 1128}, {\"team1\": \"Bricked Up\", \"team2\": \"Manly Munters\", \"score1\": 1187, \"score2\": 1180}, {\"team1\": \"The Shaggas\", \"team2\": \"UNCLE NICKS WALLET\", \"score1\": 1211, \"score2\": 1116}, {\"team1\": \"Sawtell Slobs\", \"team2\": \"Snr barbs\", \"score1\": 1256, \"score2\": 1299}, {\"team1\": \"Cody\", \"team2\": \"BuzzLikesGear\", \"score1\": 899, \"score2\": 1260}, {\"team1\": \"Smells Like 05'\", \"team2\": \"FiftyShadesofGray\", \"score1\": 1164, \"score2\": 1202}, {\"team1\": \"Bricks Blocklayers\", \"team2\": \"Bellyaches\", \"score1\": 1201, \"score2\": 1196}, {\"team1\": \"Squirt Squad\", \"team2\": \"Hopwood's Hero's\", \"score1\": 857, \"score2\": 1296}, {\"team1\": \"Tino Noir\", \"team2\": \"Doueihi Dime\", \"score1\": 1184, \"score2\": 1191}, {\"team1\": \"Cookies Contenders\", \"team2\": \"Power Puffs\", \"score1\": 1469, \"score2\": 1323}]}], \"div-3\": [{\"round\": 1, \"matches\": [{\"team1\": \"Good Cluck\", \"team2\": \"Jack De Bellend\", \"score1\": 1226, \"score2\": 1369}, {\"team1\": \"Tribute\", \"team2\": \"Uncle Campbells\", \"score1\": 1212, \"score2\": 1302}, {\"team1\": \"Backers Bust-ups\", \"team2\": \"Onyabikelomax\", \"score1\": 1417, \"score2\": 1309}, {\"team1\": \"On The Rox\", \"team2\": \"Sticky's Soldiers\", \"score1\": 1225, \"score2\": 1308}, {\"team1\": \"Poo Slingers\", \"team2\": \"Bush Pigs\", \"score1\": 1165, \"score2\": 1208}, {\"team1\": \"SlipperyMcgee\", \"team2\": \"Cutters\", \"score1\": 1381, \"score2\": 1430}, {\"team1\": \"Cant win\", \"team2\": \"Steady Eddys\", \"score1\": 1384, \"score2\": 1271}, {\"team1\": \"Johnny Leggs\", \"team2\": \"Parsons crabs\", \"score1\": 1162, \"score2\": 1039}, {\"team1\": \"Sheely's Sunrisers\", \"team2\": \"Turbo charged\", \"score1\": 1369, \"score2\": 1380}, {\"team1\": \"Nelson Mandela\", \"team2\": \"Heard of em'\", \"score1\": 922, \"score2\": 1024}]}, {\"round\": 2, \"matches\": [{\"team1\": \"Good Cluck\", \"team2\": \"Tribute\", \"score1\": 1132, \"score2\": 1367}, {\"team1\": \"Backers Bust-ups\", \"team2\": \"Jack De Bellend\", \"score1\": 1208, \"score2\": 1330}, {\"team1\": \"Sticky's Soldiers\", \"team2\": \"Uncle Campbells\", \"score1\": 1309, \"score2\": 1155}, {\"team1\": \"Poo Slingers\", \"team2\": \"Onyabikelomax\", \"score1\": 1186, \"score2\": 1147}, {\"team1\": \"On The Rox\", \"team2\": \"SlipperyMcgee\", \"score1\": 1154, \"score2\": 974}, {\"team1\": \"Cant win\", \"team2\": \"Bush Pigs\", \"score1\": 1261, \"score2\": 1298}, {\"team1\": \"Johnny Leggs\", \"team2\": \"Cutters\", \"score1\": 1257, \"score2\": 1133}, {\"team1\": \"Sheely's Sunrisers\", \"team2\": \"Steady Eddys\", \"score1\": 1336, \"score2\": 1171}, {\"team1\": \"Nelson Mandela\", \"team2\": \"Parsons crabs\", \"score1\": 965, \"score2\": 1081}, {\"team1\": \"Heard of em'\", \"team2\": \"Turbo charged\", \"score1\": 1106, \"score2\": 1342}]}, {\"round\": 3, \"matches\": [{\"team1\": \"Good Cluck\", \"team2\": \"Backers Bust-ups\", \"score1\": 1232, \"score2\": 1228}, {\"team1\": \"Sticky's Soldiers\", \"team2\": \"Tribute\", \"score1\": 1077, \"score2\": 1200}, {\"team1\": \"Poo Slingers\", \"team2\": \"Jack De Bellend\", \"score1\": 1169, \"score2\": 1156}, {\"team1\": \"SlipperyMcgee\", \"team2\": \"Uncle Campbells\", \"score1\": 1198, \"score2\": 1150}, {\"team1\": \"Cant win\", \"team2\": \"Onyabikelomax\", \"score1\": 1173, \"score2\": 1015}, {\"team1\": \"On The Rox\", \"team2\": \"Johnny Leggs\", \"score1\": 1019, \"score2\": 1117}, {\"team1\": \"Sheely's Sunrisers\", \"team2\": \"Bush Pigs\", \"score1\": 1161, \"score2\": 1095}, {\"team1\": \"Nelson Mandela\", \"team2\": \"Cutters\", \"score1\": 1028, \"score2\": 1130}, {\"team1\": \"Heard of em'\", \"team2\": \"Steady Eddys\", \"score1\": 1080, \"score2\": 1066}, {\"team1\": \"Turbo charged\", \"team2\": \"Parsons crabs\", \"score1\": 1067, \"score2\": 1111}]}, {\"round\": 4, \"matches\": [{\"team1\": \"Good Cluck\", \"team2\": \"Sticky's Soldiers\", \"score1\": 1157, \"score2\": 1021}, {\"team1\": \"Poo Slingers\", \"team2\": \"Backers Bust-ups\", \"score1\": 1076, \"score2\": 1141}, {\"team1\": \"SlipperyMcgee\", \"team2\": \"Tribute\", \"score1\": 1097, \"score2\": 1280}, {\"team1\": \"Cant win\", \"team2\": \"Jack De Bellend\", \"score1\": 1228, \"score2\": 1290}, {\"team1\": \"Johnny Leggs\", \"team2\": \"Uncle Campbells\", \"score1\": 1000, \"score2\": 1362}, {\"team1\": \"Sheely's Sunrisers\", \"team2\": \"Onyabikelomax\", \"score1\": 1281, \"score2\": 1116}, {\"team1\": \"On The Rox\", \"team2\": \"Nelson Mandela\", \"score1\": 1171, \"score2\": 1182}, {\"team1\": \"Heard of em'\", \"team2\": \"Bush Pigs\", \"score1\": 1075, \"score2\": 1318}, {\"team1\": \"Turbo charged\", \"team2\": \"Cutters\", \"score1\": 1189, \"score2\": 1162}, {\"team1\": \"Parsons crabs\", \"team2\": \"Steady Eddys\", \"score1\": 1110, \"score2\": 1370}]}]}, \"presentation\": {}}}}");
 
 function defaultData() { return JSON.parse(JSON.stringify(BAKED_DATA)); }
-function loadData() {
-  try {
-    const r = localStorage.getItem('budoo-league-hub');
-    if(r) {
-      const parsed = JSON.parse(r);
-      // If localStorage has data with seasons, use it (admin override)
-      if(parsed.seasons && Object.keys(parsed.seasons).length) return parsed;
-    }
-  } catch(e) {}
-  return defaultData();
-}
-function saveData() { localStorage.setItem('budoo-league-hub', JSON.stringify(DATA)); }
+function loadData() { return defaultData(); }
+let DATA = loadData();
 function getSeason() { return DATA.seasons[DATA.currentSeason] || null; }
 
 // ===== NAV =====
@@ -754,19 +644,18 @@ document.querySelectorAll('.nav-tab').forEach(tab => {
 
 // ===== SEASON SELECTS =====
 function populateSeasonSelects() {
-  const ids = ['season-select','scores-season-select','overall-season-select','h2h-season-select','pr-season-select','manage-season-select','copy-from-season'];
+  const ids = ['season-select','scores-season-select','overall-season-select','h2h-season-select','pr-season-select'];
   const seasons = Object.keys(DATA.seasons).sort().reverse();
   ids.forEach(id => {
     const el = document.getElementById(id);
     if(!el) return;
-    const isCopy = id === 'copy-from-season';
-    el.innerHTML = isCopy ? '<option value="">Start fresh</option>' : '';
-    seasons.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; if(!isCopy && s === DATA.currentSeason) o.selected = true; el.appendChild(o); });
-    if(!isCopy) el.onchange = () => { DATA.currentSeason = el.value; saveData(); renderAll(); syncSelects(); };
+    el.innerHTML = '';
+    seasons.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; if(s === DATA.currentSeason) o.selected = true; el.appendChild(o); });
+    el.onchange = () => { DATA.currentSeason = el.value; renderAll(); syncSelects(); };
   });
 }
 function syncSelects() {
-  ['season-select','scores-season-select','overall-season-select','h2h-season-select','pr-season-select','manage-season-select'].forEach(id => { const el = document.getElementById(id); if(el) el.value = DATA.currentSeason; });
+  ['season-select','scores-season-select','overall-season-select','h2h-season-select','pr-season-select'].forEach(id => { const el = document.getElementById(id); if(el) el.value = DATA.currentSeason; });
 }
 
 // ===== TIER TABS =====
@@ -784,7 +673,7 @@ function renderAll() {
   renderTierTabs('standings-tier-tabs','standings');
   renderTierTabs('scores-tier-tabs','scores');
   renderTierTabs('h2h-tier-tabs','h2h');
-  renderStandings(); renderOverall(); renderScores(); renderH2H(); renderAwards(); renderPromoReleg(); renderHistory(); renderCareer(); renderManage();
+  renderStandings(); renderOverall(); renderScores(); renderH2H(); renderAwards(); renderPromoReleg(); renderHistory(); renderCareer();
 }
 
 // ===== STANDINGS =====
@@ -803,7 +692,7 @@ function getStandings(tier) {
 function renderStandings() {
   const area = document.getElementById('standings-table-area');
   const s = getSeason(); const tier = currentTier.standings;
-  if(!s || !(s.teams[tier]||[]).length) { area.innerHTML = '<div class="empty-msg">No teams in this tier yet. Go to Manage to add some.</div>'; return; }
+  if(!s || !(s.teams[tier]||[]).length) { area.innerHTML = '<div class="empty-msg">No teams in this tier yet.</div>'; return; }
   const st = getStandings(tier); const isTop = tier==='budoo-cup'; const isBot = tier==='div-3';
   let h = '<div class="table-wrap"><table><thead><tr><th class="center">#</th><th>Team</th><th>Coach</th><th class="center">P</th><th class="center">W</th><th class="center">L</th><th class="center">D</th><th class="center">PF</th><th class="center">PA</th><th class="center">PTS</th></tr></thead><tbody>';
   st.forEach((t,i) => {
@@ -1041,113 +930,6 @@ function renderCareer() {
   });
   h += '</tbody></table></div>';
   area.innerHTML = h;
-}
-
-// ===== MANAGE =====
-async function unlockManage() {
-  const pw = document.getElementById('admin-pw').value;
-  const hash = await hashPassword(pw);
-  if(hash === ADMIN_HASH) {
-    adminUnlocked = true;
-    document.getElementById('manage-locked').style.display = 'none';
-    document.getElementById('manage-unlocked').style.display = 'block';
-    document.getElementById('pw-error').style.display = 'none';
-    renderManage();
-  } else {
-    document.getElementById('pw-error').style.display = 'block';
-    document.getElementById('admin-pw').value = '';
-  }
-}
-
-function renderManage() {
-  if(!adminUnlocked) return;
-  const area = document.getElementById('manage-area'); const s = getSeason();
-  if(!s) { area.innerHTML = '<div class="empty-msg">Create a season first.</div>'; return; }
-  area.innerHTML = TIERS.map(tier => {
-    const teams = s.teams[tier]||[];
-    let h = `<div class="card" style="margin-bottom:16px;border-left:3px solid ${TIER_COLORS[tier]}"><h3 style="color:${TIER_COLORS[tier]}">${TIER_NAMES[tier]} (${teams.length})</h3>`;
-    if(!teams.length) h += '<p style="color:var(--text-muted)">No teams yet</p>';
-    else { h += '<div style="display:flex;flex-wrap:wrap;gap:8px">'; teams.forEach(t => { h += `<div style="display:flex;align-items:center;gap:6px;background:var(--bg-input);padding:6px 12px;border-radius:var(--radius);font-size:0.9em;border:1px solid var(--border)"><span>${t}</span><button class="btn btn-danger btn-sm" style="padding:2px 8px;font-size:0.75em" onclick="removeTeam('${tier}','${t.replace(/'/g,"\\'")}')">✗</button></div>`; }); h += '</div>'; }
-    h += '</div>'; return h;
-  }).join('');
-}
-
-// ===== MODALS =====
-function openModal(id) { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-document.querySelectorAll('.modal-overlay').forEach(o => { o.addEventListener('click', e => { if(e.target===o) o.classList.remove('open'); }); });
-
-function createSeason() {
-  const name = document.getElementById('new-season-name').value.trim();
-  if(!name) return alert('Enter a season name');
-  if(DATA.seasons[name]) return alert('Season already exists');
-  const copyFrom = document.getElementById('copy-from-season').value;
-  const ns = { teams:{'budoo-cup':[],'div-2':[],'div-3':[]}, scores:{'budoo-cup':[],'div-2':[],'div-3':[]}, presentation:{} };
-  if(copyFrom && DATA.seasons[copyFrom]) TIERS.forEach(t => { ns.teams[t] = [...DATA.seasons[copyFrom].teams[t]]; });
-  DATA.seasons[name] = ns; DATA.currentSeason = name; saveData();
-  closeModal('modal-new-season'); document.getElementById('new-season-name').value = ''; renderAll();
-}
-
-function addTeam() {
-  const name = document.getElementById('add-team-name').value.trim();
-  const tier = document.getElementById('add-team-tier').value;
-  if(!name) return alert('Enter a team name');
-  const s = getSeason(); if(!s) return alert('Create a season first');
-  if(!s.teams[tier]) s.teams[tier] = [];
-  if(s.teams[tier].includes(name)) return alert('Team already exists');
-  s.teams[tier].push(name); saveData();
-  closeModal('modal-add-team'); document.getElementById('add-team-name').value = ''; renderAll();
-}
-
-function removeTeam(tier, name) {
-  if(!confirm(`Remove ${name}?`)) return;
-  const s = getSeason(); s.teams[tier] = s.teams[tier].filter(t => t!==name); saveData(); renderAll();
-}
-
-function openAddScoresModal() {
-  const s = getSeason(); const tier = currentTier.scores;
-  if(!s || !(s.teams[tier]||[]).length) return alert('No teams in this tier');
-  document.getElementById('score-round').value = currentWeek;
-  const teams = s.teams[tier]; const entries = document.getElementById('score-entries');
-  let h = `<p style="color:var(--text-secondary);font-size:0.85em;margin-bottom:12px">${TIER_NAMES[tier]}</p>`;
-  for(let i=0; i<Math.floor(teams.length/2); i++) {
-    h += `<div class="form-row" style="align-items:end;margin-bottom:8px"><div class="form-group"><label>${i===0?'Home':''}</label><select id="match-t1-${i}" style="font-size:0.9em"><option value="">Select</option>${teams.map(t=>`<option>${t}</option>`).join('')}</select></div><div class="form-group"><label>${i===0?'Score':''}</label><input id="match-s1-${i}" type="number" min="0" style="width:70px" placeholder="0"></div><div style="text-align:center;padding-bottom:10px;color:var(--text-muted);font-family:'Oswald',sans-serif">vs</div><div class="form-group"><label>${i===0?'Score':''}</label><input id="match-s2-${i}" type="number" min="0" style="width:70px" placeholder="0"></div><div class="form-group"><label>${i===0?'Away':''}</label><select id="match-t2-${i}" style="font-size:0.9em"><option value="">Select</option>${teams.map(t=>`<option>${t}</option>`).join('')}</select></div></div>`;
-  }
-  entries.innerHTML = h; openModal('modal-add-scores');
-}
-
-function saveScores() {
-  const s = getSeason(); const tier = currentTier.scores;
-  const round = parseInt(document.getElementById('score-round').value);
-  const teams = s.teams[tier]; const matches = [];
-  for(let i=0; i<Math.floor(teams.length/2); i++) {
-    const t1=document.getElementById(`match-t1-${i}`).value, t2=document.getElementById(`match-t2-${i}`).value;
-    const s1=parseInt(document.getElementById(`match-s1-${i}`).value)||0, s2=parseInt(document.getElementById(`match-s2-${i}`).value)||0;
-    if(t1 && t2 && t1!==t2) matches.push({team1:t1,team2:t2,score1:s1,score2:s2});
-  }
-  if(!matches.length) return alert('Add at least one matchup');
-  if(!s.scores[tier]) s.scores[tier] = [];
-  const ex = s.scores[tier].findIndex(r => r.round===round);
-  if(ex>=0) s.scores[tier][ex].matches = [...s.scores[tier][ex].matches, ...matches];
-  else s.scores[tier].push({round,matches});
-  currentWeek = round; saveData(); closeModal('modal-add-scores'); renderAll();
-}
-
-// ===== IMPORT/EXPORT =====
-function exportData() {
-  const blob = new Blob([JSON.stringify(DATA,null,2)], {type:'application/json'});
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'budoo-league-data.json'; a.click();
-}
-function importData(event) {
-  const file = event.target.files[0]; if(!file) return;
-  const r = new FileReader();
-  r.onload = e => { try { DATA = JSON.parse(e.target.result); saveData(); renderAll(); alert('Data imported successfully!'); } catch(err) { alert('Invalid file'); } };
-  r.readAsText(file); event.target.value = '';
-}
-function clearAllData() {
-  if(!confirm('Delete ALL data?')) return;
-  if(!confirm('Really sure? Cannot be undone.')) return;
-  DATA = defaultData(); saveData(); renderAll();
 }
 
 // ===== INIT =====
