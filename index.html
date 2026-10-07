@@ -854,23 +854,79 @@ function renderAwards() {
 function renderPromoReleg() {
   const area = document.getElementById('promo-releg-area'); const s = getSeason();
   if(!s) { area.innerHTML = '<div class="empty-msg">No season selected.</div>'; return; }
+
+  // Get promotion spots from finals results
+  function getPromos(top8Key, scoresKey) {
+    const bracket = s[top8Key] || {};
+    const teams = s.teams[scoresKey] || [];
+    // Build ladder (rounds 1-22, H2H only, PD tiebreaker)
+    const ts = {}; teams.forEach(t => { ts[t]={w:0,l:0,d:0,pf:0,pa:0}; });
+    (s.scores[scoresKey]||[]).forEach(r => {
+      if(r.round > 22) return;
+      r.matches.forEach(m => {
+        if(m.team2==='BYE') return;
+        const {team1:t1,team2:t2,score1:s1,score2:s2} = m;
+        ts[t1].pf+=s1; ts[t1].pa+=s2; ts[t2].pf+=s2; ts[t2].pa+=s1;
+        if(s1>s2){ts[t1].w++;ts[t2].l++;} else if(s2>s1){ts[t2].w++;ts[t1].l++;} else{ts[t1].d++;ts[t2].d++;}
+      });
+    });
+    const ranked = [...teams].sort((a,b) => {
+      const pa=ts[a].w*2+ts[a].d, pb=ts[b].w*2+ts[b].d;
+      return pb-pa || (ts[b].pf-ts[b].pa)-(ts[a].pf-ts[a].pa);
+    });
+    const ladder = {}; ranked.forEach((t,i) => { ladder[t]=i+1; });
+
+    const gfArr = bracket['26'] || bracket[26] || [{}];
+    const gf = gfArr[0];
+    const gfWinner = gf.score1 > gf.score2 ? gf.team1 : gf.team2;
+    const gfRunner = gf.score1 > gf.score2 ? gf.team2 : gf.team1;
+
+    const r25 = bracket['25'] || bracket[25] || [];
+    const prelimLosers = r25.map(m => m.score1 > m.score2 ? m.team2 : m.team1);
+    prelimLosers.sort((a,b) => (ladder[a]||99)-(ladder[b]||99));
+
+    return {
+      first: gfWinner,
+      second: gfRunner,
+      third: prelimLosers[0] || null,
+      fourth: prelimLosers[1] || null,
+      ladder
+    };
+  }
+
+  const promos = {
+    'div-2': getPromos('div2_top8_finals','div-2'),
+    'div-3': getPromos('div3_finals','div-3')
+  };
+
   let h = '';
   TIERS.forEach(tier => {
     const st = getStandings(tier); if(!st.length) return;
     const isTop = tier==='budoo-cup'; const isBot = tier==='div-3';
     h += `<div class="card" style="margin-bottom:20px;border-left:3px solid ${TIER_COLORS[tier]}"><h3 style="color:${TIER_COLORS[tier]}">${TIER_NAMES[tier]}</h3><div class="promo-releg-summary">`;
+
     if(!isTop) {
+      const p = promos[tier];
       h += '<div class="promo-box"><h5>⬆ Promoted</h5><ul class="promo-list">';
-      st.slice(0,3).forEach(t => { h+=`<li>${t.name} <span class="promo-tag tag-auto">Finals</span></li>`; });
-      h += '<li style="color:var(--text-muted)">4th — TBD (Pres Night)</li>';
+      if(p && p.first) {
+        h += `<li>${p.first} <span class="promo-tag tag-auto">GF Winner</span></li>`;
+        h += `<li>${p.second} <span class="promo-tag tag-auto">GF Runner-up</span></li>`;
+        h += `<li>${p.third} <span class="promo-tag tag-auto">Prelim (Ladder #${p.ladder[p.third]})</span></li>`;
+        h += `<li style="color:var(--text-muted)">${p.fourth} <span class="promo-tag" style="background:rgba(255,193,7,0.2);color:#ffc107">Pres Night (Ladder #${p.ladder[p.fourth]})</span></li>`;
+      }
       h += '</ul></div>';
-    } else { h += '<div class="promo-box" style="opacity:0.3"><h5>⬆ Top Tier</h5><p style="font-size:0.85em">No promotion from Budoo Cup</p></div>'; }
+    } else {
+      h += '<div class="promo-box" style="opacity:0.3"><h5>⬆ Top Tier</h5><p style="font-size:0.85em">No promotion from Budoo Cup</p></div>';
+    }
+
     if(!isBot) {
       h += '<div class="releg-box"><h5>⬇ Relegated</h5><ul class="releg-list">';
       st.slice(-3).forEach(t => { h+=`<li>${t.name} <span class="promo-tag tag-auto">Bottom 3</span></li>`; });
-      h += '<li style="color:var(--text-muted)">4th — TBD (No-Show)</li>';
+      h += `<li style="color:var(--text-muted)">4th — Pres Night No-Show</li>`;
       h += '</ul></div>';
-    } else { h += '<div class="releg-box" style="opacity:0.3"><h5>⬇ Bottom Tier</h5><p style="font-size:0.85em">No relegation from Div 3</p></div>'; }
+    } else {
+      h += '<div class="releg-box" style="opacity:0.3"><h5>⬇ Bottom Tier</h5><p style="font-size:0.85em">No relegation from Div 3</p></div>';
+    }
     h += '</div></div>';
   });
   area.innerHTML = h;
